@@ -1,0 +1,48 @@
+import java.util.*;
+
+class Solution {
+    public int[][] minAbsDiff(int[][] grid, int k) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int[][] ans = new int[m - k + 1][n - k + 1];
+
+        for (int i = 0; i <= m - k; i++) {
+            for (int j = 0; j <= n - k; j++) {
+
+                // Step 1: use set to store distinct values
+                HashSet<Integer> set = new HashSet<>();
+
+                for (int x = i; x < i + k; x++) {
+                    for (int y = j; y < j + k; y++) {
+                        set.add(grid[x][y]);
+                    }
+                }
+
+                // Convert to list
+                ArrayList<Integer> list = new ArrayList<>(set);
+
+                // If only one unique element
+                if (list.size() <= 1) {
+                    ans[i][j] = 0;
+                    continue;
+                }
+
+                // Step 2: sort
+                Collections.sort(list);
+
+                // Step 3: find min difference
+                int minDiff = Integer.MAX_VALUE;
+
+                for (int p = 1; p < list.size(); p++) {
+                    int diff = list.get(p) - list.get(p - 1);
+                    minDiff = Math.min(minDiff, diff);
+                }
+
+                ans[i][j] = minDiff;
+            }
+        }
+
+        return ans;
+    }
+}
